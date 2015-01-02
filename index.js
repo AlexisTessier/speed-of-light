@@ -1,7 +1,23 @@
 'use strict';
 
+var _ = require('underscore');
 var stringColor = require("string-color");
 var uniqueSOLTestID = 0;
+
+var errorCauseDiff = function(feature, keys) {
+	errorMsg = "damn";
+
+	console.log(errorMsg.color("red"));
+};
+
+var resultsAreTheSame = function(results) {
+	_(results).each( function( result, key, results ) {
+	
+
+	});
+
+	return true;
+};
 
 var Runner = function(max) {
 	this.current = 0;
@@ -41,7 +57,7 @@ var SOLTest = function(params) {
 };
 
 SOLTest.prototype.run = function(showLog) {
-	var i, test, start, showLog = typeof showLog === "boolean" ? showLog : true;
+	var resultsToCompare = [], i, test, start, showLog = typeof showLog === "boolean" ? showLog : true;
 
 	if(showLog){console.log(("Running Tests : "+this.name).color("green"));}
 	for(i = 0; i < this.test.length; i++){
@@ -50,13 +66,15 @@ SOLTest.prototype.run = function(showLog) {
 		if(showLog){console.log(("\t Test : "+test.name).color("purple"));}
 		start = Date.now();
 
-		test.action(new Runner(this.timesToRun));
+		resultsToCompare.push(test.action(new Runner(this.timesToRun)));
 
 		test.result = Date.now() - start;
 		if(showLog){console.log(("\t\t time : "+test.result).color("blue"));}
 	}
 
 	this.yetRunned = true;
+
+	this.compareResults(resultsToCompare);
 
 	return this;
 };
@@ -100,6 +118,12 @@ SOLTest.prototype.order = function(showLog) {
 	this.yetRunned = false;
 
 	return this;
+};
+
+SOLTest.prototype.compareResults = function(results) {
+	var compare = resultsAreTheSame(results);
+
+	console.log(compare);
 };
 
 var SpeedOfLight = function(params){

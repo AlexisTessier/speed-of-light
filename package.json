@@ -12,6 +12,7 @@
   },
   "keywords": [
     "performance",
+    "test",
     "tests"
   ],
   "author": "Alexis Tessier <alexis.tessier@designdo.fr>",
@@ -21,7 +22,8 @@
   },
   "homepage": "https://github.com/AlexisTessier/speed-of-light",
   "dependencies": {
-    "string-color": "^0.8.0"
+    "string-color": "^0.8.0",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "must": "^0.12.0"

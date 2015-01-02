@@ -2,6 +2,33 @@
 
 var SpeedOfLight = require('./index');
 
+
+SpeedOfLight({
+	name : "Variable declaration and first assignation",
+	timesToRun : 100000,
+	test : {
+		"all in first line after var keyword" : function(test) {
+			var declareAndAssign = function(){
+				var firstName = "Georges", lastName = "Lucas";
+			};
+
+			while(test.loop()){
+				declareAndAssign();
+			}
+		},
+		"declaration with var keyword first, then assignation" : function(test) {
+			var declareAndAssign = function(){
+				var firstName, lastName;
+				firstName = "Georges", lastName = "Lucas";
+			};
+
+			while(test.loop()){
+				declareAndAssign();
+			}
+		}
+	}
+}).order();
+
 SpeedOfLight({
 	name : "String assignation",
 	timesToRun : 100000,
@@ -24,7 +51,7 @@ SpeedOfLight({
 	}
 }).run().order();
 
-SpeedOfLight({
+/*SpeedOfLight({
 	name : "Loop on Array",
 	timesToRun : 100,
 	test : {
@@ -60,4 +87,4 @@ SpeedOfLight({
 			}
 		}
 	}
-}).run().order();
+}).run().order();*/
