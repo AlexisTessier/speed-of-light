@@ -2,11 +2,10 @@
 
 var SpeedOfLight = require('./index');
 
-
-SpeedOfLight({
-	name : "Variable declaration and first assignation",
-	timesToRun : 100000,
-	test : {
+SpeedOfLight.performance.test({
+	about : "Variable declaration and first assignation",
+	timeScale : 2000,
+	implementations : {
 		"all in first line after var keyword" : function(test) {
 			var declareAndAssign = function(){
 				var firstName = "Georges", lastName = "Lucas";
@@ -29,10 +28,10 @@ SpeedOfLight({
 	}
 }).order();
 
-SpeedOfLight({
-	name : "String assignation",
-	timesToRun : 100000,
-	test : {
+SpeedOfLight.benchmark({
+	about : "String assignation",
+	timeScale : 2000,
+	implementations : {
 		"Literal String" : function(test) {
 			var val;
 
@@ -51,10 +50,10 @@ SpeedOfLight({
 	}
 }).run().order();
 
-/*SpeedOfLight({
-	name : "Loop on Array",
-	timesToRun : 100,
-	test : {
+SpeedOfLight({
+	about : "Loop on Array",
+	timesToRun : 20000,
+	implementations : {
 		"While" : function(test) {
 			var i, imax, elem, array = ["hello","hello","hello","hello","hello","hello","hello","hello"];
 
@@ -87,4 +86,4 @@ SpeedOfLight({
 			}
 		}
 	}
-}).run().order();*/
+}).order();

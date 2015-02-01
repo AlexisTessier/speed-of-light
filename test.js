@@ -9,17 +9,16 @@ describe('Speed of light (SOL)', function() {
 			SOL.must.be.a.function();
 		});
 
-		var counter = 0, test = SOL(), test2 = SOL(), runReturn, orderReturn, runner, test3 = SOL({
-			name : "Test for mocha",
-			timesToRun : 10,
-			test : {
+		var counter = 0, test = SOL(), test2 = SOL.performance.test(), runReturn, orderReturn, runner, timeScaleRunner, test3 = SOL.benchmark({
+			about : "Test for mocha",
+			implementations : {
 				"get the runner" : function(test) {
 					runner = test;
 				}
 			}
 		}), subtest, finalTimesToRun, test4 = SOL({
-			timesToRun : 50,
-			test : {
+			timesToRun : 50000,
+			implementations : {
 				"just assign" : function(test){
 					var assign = 8, toAssign = 5, toAssign2 = 2;
 
@@ -49,6 +48,14 @@ describe('Speed of light (SOL)', function() {
 					}
 				}
 			}
+		}), test5 = SOL.benchmark({
+			about : "Test for mocha 2",
+			timeScale : 5000,
+			implementations : {
+				"get the runner for timeScale" : function(test) {
+					timeScaleRunner = test;
+				}
+			}
 		});	
 
 		describe('Whatever the params, returns a test object', function() {
@@ -68,6 +75,10 @@ describe('Speed of light (SOL)', function() {
 				test4.must.be.an.object();
 				test4.run.must.be.a.function();
 				test4.order.must.be.a.function();
+
+				test5.must.be.an.object();
+				test5.run.must.be.a.function();
+				test5.order.must.be.a.function();
 			});
 
 			it('Test object have an unique string as name', function() {
@@ -81,9 +92,14 @@ describe('Speed of light (SOL)', function() {
 
 				test3.must.have.ownProperty("name");
 				test3.name.must.be.a.string();
+				test3.name.must.be.equal("Test for mocha");
 
 				test4.must.have.ownProperty("name");
 				test4.name.must.be.a.string();
+
+				test5.must.have.ownProperty("name");
+				test5.name.must.be.a.string();
+				test3.name.must.be.equal("Test for mocha");
 			});
 
 			it('Test object start with a boolean yetRunned at false', function() {
@@ -102,9 +118,13 @@ describe('Speed of light (SOL)', function() {
 				test4.must.have.ownProperty("yetRunned", false);
 				test4.yetRunned.must.be.boolean();
 				test4.yetRunned.must.be.equal(false);
+
+				test5.must.have.ownProperty("yetRunned", false);
+				test5.yetRunned.must.be.boolean();
+				test5.yetRunned.must.be.equal(false);
 			});
 
-			it('Test object start with a integer timesToRun equal to default timesToRun multiplied by the param', function() {
+			it('Test object start with a integer timesToRun equal to default timesToRun (10000) or to defined timesToRun', function() {
 				test.must.have.ownProperty("timesToRun");
 				test.timesToRun.must.be.number();
 				test.timesToRun.must.be.equal(parseInt(test.timesToRun, 10));
@@ -116,12 +136,35 @@ describe('Speed of light (SOL)', function() {
 				test3.must.have.ownProperty("timesToRun");
 				test3.timesToRun.must.be.number();
 				test3.timesToRun.must.be.equal(parseInt(test3.timesToRun, 10));
-				test3.timesToRun.must.be.equal(parseInt((finalTimesToRun = test.timesToRun*10), 10));
+				test3.timesToRun.must.be.equal(parseInt((finalTimesToRun = 10000), 10));
 
 				test4.must.have.ownProperty("timesToRun");
 				test4.timesToRun.must.be.number();
 				test4.timesToRun.must.be.equal(parseInt(test4.timesToRun, 10));
+				test4.timesToRun.must.be.equal(50000);
 
+				test5.must.have.ownProperty("timesToRun");
+				test5.timesToRun.must.be.number();
+				test5.timesToRun.must.be.equal(parseInt(test5.timesToRun, 10));
+				test5.timesToRun.must.be.equal(10000);
+			});
+
+			it('Test object start with a integer timeScale equal to passed params or null', function() {
+				test.must.have.ownProperty("timeScale");
+				(test.timeScale === null).must.be.equal(true);
+
+				test2.must.have.ownProperty("timeScale");
+				(test2.timeScale === null).must.be.equal(true);
+
+				test3.must.have.ownProperty("timeScale");
+				(test3.timeScale === null).must.be.equal(true);
+
+				test4.must.have.ownProperty("timeScale");
+				(test4.timeScale === null).must.be.equal(true);
+
+				test5.must.have.ownProperty("timeScale");
+				test5.timeScale.must.be.number();
+				test5.timeScale.must.be.equal(5000);
 			});
 
 			it('Test object have a test array containing all subtests', function() {
@@ -140,6 +183,10 @@ describe('Speed of light (SOL)', function() {
 				test4.must.have.ownProperty("test");
 				test4.test.must.be.an.array();
 				test4.test.length.must.be.equal(4);
+
+				test5.must.have.ownProperty("test");
+				test5.test.must.be.an.array();
+				test5.test.length.must.be.equal(1);
 			});
 
 			it('A subtest must start with a name, result at null and an action', function() {
@@ -216,7 +263,7 @@ describe('Speed of light (SOL)', function() {
 				}
 			});
 
-			it('The runner must have a loop method who loop good time of time', function() {
+			it('The runner must have a loop method which loop good time of time', function() {
 				runner.must.be.an.object();
 				runner.loop.must.be.a.function();
 
@@ -228,6 +275,18 @@ describe('Speed of light (SOL)', function() {
 
 				(runner.current-1).must.be.equal(runner.max);
 				counter.must.be.equal(runner.max);
+			});
+
+			it('The runner with timeScale must have a loop method which loop good time of time', function() {
+				test5.run(false);
+				timeScaleRunner.must.be.an.object();
+				timeScaleRunner.loop.must.be.a.function();
+
+				timeScaleRunner.max.must.be.equal(5000);
+
+				while(runner.loop()){}
+
+				runner.current.must.be.at.least(5000);
 			});
 		});
 	});
