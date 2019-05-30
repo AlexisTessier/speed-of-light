@@ -1,6 +1,8 @@
 Speed Of Light
 --------------
 
+⚠️ Deprecated - This module was almost never used
+
 ####About
 
 Speed Of Light allows you to easily run some basic performance tests in javascript. _(What kind of loop is the fastest ? Is this implementation faster than this other ?)_
